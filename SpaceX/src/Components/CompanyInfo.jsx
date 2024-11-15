@@ -1,28 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { fetchCompanyInfo } from '../CompInfoApi';
+import React from 'react';
+import CompanyInfoApi from '../CompInfoApi'; 
 
 const Company = () => {
-    const [data, setData] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const { companyInfo } = CompanyInfoApi(); 
 
-    useEffect(() => {
-        const getData = async () => {
-            try {
-                const companyInfo = await fetchCompanyInfo();
-                setData(companyInfo);
-            } catch (err) {
-                setError(err.message);
-            } finally {
-                setLoading(false);
-            }
-        };
+    if (!companyInfo) {
+        return <p>Loading...</p>; 
+    }
 
-        getData();
-    }, []);
-
-    if (loading) return null;
-    if (error) return <p>Error: {error}</p>;
+    
 
     return (
         <div className='MainContent'>
@@ -34,7 +20,7 @@ const Company = () => {
                         <img src="src/assets/images/Tesla.svg" alt="Icon" className="divaIocn" />
                         <div>
                             <p className='name'>Name</p>
-                            <h3 className='innertext'>{data.name}</h3>
+                            <h3 className='innertext'>{companyInfo.name}</h3>
                             <p className='month'><span className='color'>&uarr; 16%</span> this month</p>
                         </div>
                     </div>
@@ -43,7 +29,7 @@ const Company = () => {
                         <img src="src/assets/images/ElonMusk.svg" alt="Icon" className="divaIocn" />
                         <div>
                             <p className='name'>Founder</p>
-                            <h3 className='innertext'>{data.founder}</h3>
+                            <h3 className='innertext'>{companyInfo.founder}</h3>
                             <p className='month'><span className='color2'>&darr; 1%</span> this month</p>
                         </div>
                     </div>
@@ -52,7 +38,7 @@ const Company = () => {
                         <img src="src/assets/images/monitor.svg" alt="Icon" className="divaIocn" />
                         <div>
                             <p className='name'>Valuation</p>
-                            <h3 className='innertext'>${data.valuation.toLocaleString()}</h3>
+                            <h3 className='innertext'>${companyInfo.valuation.toLocaleString()}</h3>
                         </div>
                     </div>
                 </div>
@@ -66,7 +52,7 @@ const Company = () => {
                             <img src="src/assets/images/Tesla.svg" alt="Icon" className="divaIocn" />
                             <div>
                                 <p className='name'>City</p>
-                                <h3 className='innertext'>{data.headquarters.city}</h3>
+                                <h3 className='innertext'>{companyInfo.headquarters.city}</h3>
                             </div>
                         </div>
 
@@ -74,18 +60,17 @@ const Company = () => {
                             <img src="src/assets/images/Tesla.svg" alt="Icon" className="divaIocn" />
                             <div>
                                 <p className='name'>State</p>
-                                <h3 className='innertext'>{data.headquarters.state}</h3>
+                                <h3 className='innertext'>{companyInfo.headquarters.state}</h3>
                             </div>
                         </div>
-                        
                     </div>
                     <div className='Headquarterinnerdivimg3'>
-                            <img src="src/assets/images/Tesla.svg" alt="Icon" className="divaIocn" />
-                            <div>
-                                <p className='name'>address</p>
-                                <h3 className='innertext'>{data.headquarters.address}</h3>
-                            </div>
+                        <img src="src/assets/images/Tesla.svg" alt="Icon" className="divaIocn" />
+                        <div>
+                            <p className='name'>Address</p>
+                            <h3 className='innertext'>{companyInfo.headquarters.address}</h3>
                         </div>
+                    </div>
                 </div>
             </div>
         </div>
