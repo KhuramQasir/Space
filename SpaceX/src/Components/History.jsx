@@ -1,8 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import HistoryApi from '../HistoryApi';
 
 const History = () => {
     const { events } = HistoryApi();
+    const [currentPage, setCurrentPage] = useState(1);
+    const rowsPerPage = 5; 
+
+    
+    const totalPages = Math.ceil(events.length / rowsPerPage);
+
+   
+    const currentRows = events.slice(
+        (currentPage - 1) * rowsPerPage,
+        currentPage * rowsPerPage
+    );
+
+    
+    const handlePageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    };
 
     return (
         <div className="history-container">
@@ -17,23 +33,24 @@ const History = () => {
                 </div>
             </div>
 
-            <table className="history-table">
-                <thead>
-                    <tr>
-                        <th>Title</th>
-                        <th>Event Date</th>
-                        <th>Details</th>
-                        <th>Links</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody className='tbody'>
-                    {events.map(event => (
-                        <tr key={event.id}>
-                            <td>{event.title}</td>
-                            <td>{new Date(event.event_date_utc).toLocaleDateString()}</td>
-                            <td className='Detail'>{event.details.substring(0, 40)}...</td>
-                            <td>
+            <div className="table-container">
+                <table className="history-table">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Event Date</th>
+                            <th>Details</th>
+                            <th>Links</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody className='tbody'>
+                        {currentRows.map(event => (
+                            <tr key={event.id}>
+                                <td>{event.title}</td>
+                                <td>{new Date(event.event_date_utc).toLocaleDateString()}</td>
+                                <td className='Detail'>{event.details.substring(0, 40)}...</td>
+                                <td>
                                 {event.links.reddit || event.links.article || event.links.wikipedia ? (
                                     <>
                                         {event.links.reddit && (
@@ -54,25 +71,28 @@ const History = () => {
                                     </>
                                 ) : 'N/A'}
                             </td>
-
-                            <td className='Status-btn'>
-                                <button className="status-button active">Active</button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+                                <td className='Status-btn'>
+                                    <button className="status-button active">Active</button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
 
             <div className="pagination">
-                <button className="pagination-button">1</button>
-                <button className="pagination-button">2</button>
-                <button className="pagination-button">3</button>
-         X </div>
+                {Array.from({ length: totalPages }, (_, index) => (
+                    <button
+                        key={index}
+                        className={`pagination-button ${currentPage === index + 1 ? 'active' : ''}`}
+                        onClick={() => handlePageChange(index + 1)}
+                    >
+                        {index + 1}
+                    </button>
+                ))}
+            </div>
         </div>
     );
 };
 
 export default History;
-
-
-

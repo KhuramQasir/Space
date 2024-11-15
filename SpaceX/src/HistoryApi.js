@@ -24,7 +24,7 @@ const HistoryApi = () => {
 
             setEvents(formattedData);
         } catch (error) {
-            console.error("Failed to fetch SpaceX history data:", error);
+            console.error("Failed:", error);
         }
     };
 

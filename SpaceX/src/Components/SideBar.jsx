@@ -51,7 +51,7 @@ const SideBar = () => {
                     <div className="menu">
                         <ul className="menu-link">
                             <li className="nav-link">
-                                <a href="#">
+                                <a href="/mission">
                                     <img src='src\assets\images\Menu.svg' alt="Icon" className="icon" />
                                     <span className="text nav-text">Missions  &nbsp; &nbsp; &gt;</span>
                                 </a>
