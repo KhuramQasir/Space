@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom"; 
 
 const SideBar = () => {
     const [isSidebarOpen, setSidebarOpen] = useState(window.innerWidth >= 991);
@@ -30,11 +30,9 @@ const SideBar = () => {
                     <div className="menu">
                         <ul className="menu-link">
                             <li
-                                className={`nav-link ${
-                                    location.pathname === "/" ? "active" : ""
-                                }`}
+                                className={`nav-link ${location.pathname === "/" ? "active" : ""}`}
                             >
-                                <a href="/">
+                                <Link to="/">  
                                     <img
                                         src="src/assets/images/CompanyInfo.svg"
                                         alt="Dashboard Icon"
@@ -43,18 +41,16 @@ const SideBar = () => {
                                     <span className="text nav-text">
                                         Company Info &nbsp; &gt;
                                     </span>
-                                </a>
+                                </Link>
                             </li>
                         </ul>
                     </div>
                     <div className="menu">
                         <ul className="menu-link">
                             <li
-                                className={`nav-link ${
-                                    location.pathname === "/history" ? "active" : ""
-                                }`}
+                                className={`nav-link ${location.pathname === "/history" ? "active" : ""}`}
                             >
-                                <a href="/history">
+                                <Link to="/history">  
                                     <img
                                         src="src/assets/images/History.svg"
                                         alt="History Icon"
@@ -63,18 +59,16 @@ const SideBar = () => {
                                     <span className="text nav-text">
                                         History &nbsp; &nbsp; &gt;
                                     </span>
-                                </a>
+                                </Link>
                             </li>
                         </ul>
                     </div>
                     <div className="menu">
                         <ul className="menu-link">
                             <li
-                                className={`nav-link ${
-                                    location.pathname === "/mission" ? "active" : ""
-                                }`}
+                                className={`nav-link ${location.pathname === "/mission" ? "active" : ""}`}
                             >
-                                <a href="/mission">
+                                <Link to="/mission"> 
                                     <img
                                         src="src/assets/images/Menu.svg"
                                         alt="Icon"
@@ -83,7 +77,7 @@ const SideBar = () => {
                                     <span className="text nav-text">
                                         Missions &nbsp; &nbsp; &gt;
                                     </span>
-                                </a>
+                                </Link>
                             </li>
                         </ul>
                     </div>
@@ -93,7 +87,7 @@ const SideBar = () => {
                         alt="Upgrade"
                     />
                     <div className="profile">
-                        <div className="round ">
+                        <div className="round">
                             <img
                                 src="src/assets/images/Ellipse 8.png"
                                 alt="Profile"

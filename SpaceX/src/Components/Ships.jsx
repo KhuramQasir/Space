@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function Misson() {
+export default function Ships() {
   return (
     <div className='history-container'>
       <h3>History Detail</h3>

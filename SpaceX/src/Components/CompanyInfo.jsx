@@ -1,5 +1,5 @@
 import React from 'react';
-import CompanyInfoApi from '../CompInfoApi'; 
+import CompanyInfoApi from '../Api/CompInfoApi'; 
 
 const Company = () => {
     const { companyInfo } = CompanyInfoApi(); 
