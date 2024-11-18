@@ -35,7 +35,7 @@ const PaginationButton = ({ totalPages, currentPage, onPageChange }) => {
 PaginationButton.propTypes = {
     totalPages: PropTypes.number.isRequired,
     currentPage: PropTypes.number.isRequired,
-    onPageChange: PropTypes.func.isRequired,
+    
 };
 
 export default PaginationButton;

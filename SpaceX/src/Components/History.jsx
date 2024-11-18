@@ -121,7 +121,7 @@ const History = () => {
                 </table>
             </div>
 
-            {/* Use the Common Component */}
+         
             <PaginationButton
                 totalPages={totalPages}
                 currentPage={currentPage}
