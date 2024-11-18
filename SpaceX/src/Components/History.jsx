@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import HistoryApi from '../HistoryApi';
+import PaginationButton from '../Components/pagination-button';
 
 const History = () => {
     const { events } = HistoryApi();
     const [currentPage, setCurrentPage] = useState(1);
-    const [searchQuery, setSearchQuery] = useState(''); 
+    const [searchQuery, setSearchQuery] = useState('');
     const rowsPerPage = 5;
 
-    
     const filteredEvents = events.filter((event) =>
         event.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         event.details.toLowerCase().includes(searchQuery.toLowerCase())
@@ -21,7 +21,9 @@ const History = () => {
     );
 
     const handlePageChange = (pageNumber) => {
-        setCurrentPage(pageNumber);
+        if (pageNumber >= 1 && pageNumber <= totalPages) {
+            setCurrentPage(pageNumber);
+        }
     };
 
     return (
@@ -33,10 +35,10 @@ const History = () => {
                         type="text"
                         placeholder="Search"
                         className="history-search"
-                        value={searchQuery} 
+                        value={searchQuery}
                         onChange={(e) => {
-                            setSearchQuery(e.target.value); 
-                            setCurrentPage(1); 
+                            setSearchQuery(e.target.value);
+                            setCurrentPage(1);
                         }}
                     />
                     <select className="history-sort">
@@ -119,17 +121,12 @@ const History = () => {
                 </table>
             </div>
 
-            <div className="pagination">
-                {Array.from({ length: totalPages }, (_, index) => (
-                    <button
-                        key={index}
-                        className={`pagination-button ${currentPage === index + 1 ? 'active' : ''}`}
-                        onClick={() => handlePageChange(index + 1)}
-                    >
-                        {index + 1}
-                    </button>
-                ))}
-            </div>
+            {/* Use the Common Component */}
+            <PaginationButton
+                totalPages={totalPages}
+                currentPage={currentPage}
+                onPageChange={handlePageChange}
+            />
         </div>
     );
 };
