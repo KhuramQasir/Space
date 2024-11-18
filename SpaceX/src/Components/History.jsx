@@ -88,7 +88,7 @@ const History = () => {
                                                     rel="noopener noreferrer"
                                                 >
                                                     <img
-                                                        src="src/assets/images/Article.png"
+                                                        src="src\assets\images\Article.png"
                                                         alt="Article"
                                                         className="icon"
                                                     />

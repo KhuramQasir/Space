@@ -1,39 +1,57 @@
 import React, { useState, useEffect } from 'react';
-import fetchMissionData from '../Api/MissionsApi'; 
-import PaginationButton from '../Components/pagination-button';
+
 
 const Missions = () => {
     const [events, setEvents] = useState([]); 
     const [currentPage, setCurrentPage] = useState(1);
     const [searchQuery, setSearchQuery] = useState('');
+    const [totalItems, setTotalItems] = useState(0);
     const rowsPerPage = 5;
 
     
+    const fetchMissionData = async (page, limit) => {
+        const offset = (page - 1) * limit;
+        const url = `https://api.spacexdata.com/v3/missions?limit=${limit}&offset=${offset}`;
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error("Error", error);
+            return [];
+        }
+    };
+
+   
     useEffect(() => {
         const getMissionData = async () => {
-            const missionData = await fetchMissionData();
+            const missionData = await fetchMissionData(currentPage, rowsPerPage);
             setEvents(missionData);
+     
+            setTotalItems(16); 
         };
         getMissionData();
-    }, []);  
+    }, [currentPage]);
+
+   
+   
+   
+    const totalPages = Math.ceil(totalItems / rowsPerPage);
+
+  
+    const goToPage = (page) => {
+        if (page > 0 && page <= totalPages) {
+            setCurrentPage(page);
+        }
+    };
+
+
+    
 
     const filteredEvents = events.filter((event) =>
         event.mission_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         event.description.toLowerCase().includes(searchQuery.toLowerCase())
     );
-
-    const totalPages = Math.ceil(filteredEvents.length / rowsPerPage);
-
-    const currentRows = filteredEvents.slice(
-        (currentPage - 1) * rowsPerPage,
-        currentPage * rowsPerPage
-    );
-
-    const handlePageChange = (pageNumber) => {
-        if (pageNumber >= 1 && pageNumber <= totalPages) {
-            setCurrentPage(pageNumber);
-        }
-    };
 
     return (
         <div className="history-container">
@@ -69,7 +87,7 @@ const Missions = () => {
                         </tr>
                     </thead>
                     <tbody className="tbody">
-                        {currentRows.map((event) => (
+                        {filteredEvents.map((event) => (
                             <tr key={event.mission_id}>
                                 <td>{event.mission_name}</td>
                                 <td>{event.manufacturers.join(', ')}</td>
@@ -84,8 +102,8 @@ const Missions = () => {
                                                     rel="noopener noreferrer"
                                                 >
                                                     <img
-                                                        src="src\assets\images\website.jpg"
-                                                        alt="Reddit"
+                                                        src="src/assets/images/website.jpg"
+                                                        alt="website"
                                                         className="icon"
                                                     />
                                                 </a>
@@ -97,8 +115,8 @@ const Missions = () => {
                                                     rel="noopener noreferrer"
                                                 >
                                                     <img
-                                                        src="src\assets\images\twitter.webp"
-                                                        alt="Article"
+                                                        src="src/assets/images/twitter.webp"
+                                                        alt="twitter"
                                                         className="icon"
                                                     />
                                                 </a>
@@ -121,7 +139,6 @@ const Missions = () => {
                                         'N/A'
                                     )}
                                 </td>
-                                
                                 <td className="Status-btn">
                                     <button className="status-button active">Active</button>
                                 </td>
@@ -131,11 +148,17 @@ const Missions = () => {
                 </table>
             </div>
 
-            <PaginationButton
-                totalPages={totalPages}
-                currentPage={currentPage}
-                onPageChange={handlePageChange}
-            />
+           
+            <div className="pagination">
+                <button className="pagination-button" onClick={() => goToPage(currentPage - 1)} disabled={currentPage === 1}>
+                &lt;
+                </button>
+                <span>Page {currentPage} of {totalPages}</span>
+           
+                <button className="pagination-button" onClick={() => goToPage(currentPage + 1)} disabled={currentPage === totalPages}>
+                &gt;
+                </button>
+            </div>
         </div>
     );
 };

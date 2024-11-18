@@ -81,6 +81,26 @@ const SideBar = () => {
                             </li>
                         </ul>
                     </div>
+
+                    <div className="menu">
+                        <ul className="menu-link">
+                            <li
+                                className={`nav-link ${location.pathname === "/ships" ? "active" : ""}`}
+                            >
+                                <Link to="/ships"> 
+                                    <img
+                                        src="src/assets/images/Menu.svg"
+                                        alt="Icon"
+                                        className="icon"
+                                    />
+                                    <span className="text nav-text">
+                                        Ships &nbsp; &nbsp; &gt;
+                                    </span>
+                                </Link>
+                            </li>
+                        </ul>
+                    </div>
+
                     <img
                         className={`upgrade ${isSidebarOpen ? "open" : "closed"}`}
                         src="src/assets/images/GetProNow.png"
