@@ -2,11 +2,14 @@ import React, { useState, useEffect } from 'react';
 
 
 const Missions = () => {
+
     const [events, setEvents] = useState([]); 
     const [currentPage, setCurrentPage] = useState(1);
     const [searchQuery, setSearchQuery] = useState('');
     const [totalItems, setTotalItems] = useState(0);
-    const rowsPerPage = 5;
+    const rowsPerPage = 4;
+
+
 
     
     const fetchMissionData = async (page, limit) => {
@@ -22,23 +25,32 @@ const Missions = () => {
         }
     };
 
+
+
+
    
     useEffect(() => {
         const getMissionData = async () => {
             const missionData = await fetchMissionData(currentPage, rowsPerPage);
             setEvents(missionData);
      
-            setTotalItems(16); 
+            setTotalItems(9); 
         };
         getMissionData();
     }, [currentPage]);
 
    
+
+
+
    
    
     const totalPages = Math.ceil(totalItems / rowsPerPage);
 
   
+
+
+
     const goToPage = (page) => {
         if (page > 0 && page <= totalPages) {
             setCurrentPage(page);
@@ -46,7 +58,10 @@ const Missions = () => {
     };
 
 
-    
+
+
+
+
 
     const filteredEvents = events.filter((event) =>
         event.mission_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -153,7 +168,15 @@ const Missions = () => {
                 <button className="pagination-button" onClick={() => goToPage(currentPage - 1)} disabled={currentPage === 1}>
                 &lt;
                 </button>
-                <span>Page {currentPage} of {totalPages}</span>
+                {Array.from({ length: totalPages }, (_, index) => (
+                <button
+                    key={index}
+                    className={`pagination-button ${currentPage === index + 1 ? 'active' : ''}`}
+                    onClick={() => goToPage(index + 1)}
+                >
+                    {index + 1}
+                </button>
+            ))}
            
                 <button className="pagination-button" onClick={() => goToPage(currentPage + 1)} disabled={currentPage === totalPages}>
                 &gt;
