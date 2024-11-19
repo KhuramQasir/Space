@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import HistoryApi from '../Api/HistoryApi';
 import PaginationButton from '../Components/pagination-button';
+import SocialLinks from './SocialLinks';
 
 const History = () => {
     const { events } = HistoryApi();
@@ -66,51 +67,19 @@ const History = () => {
                                 <td>{new Date(event.event_date_utc).toLocaleDateString()}</td>
                                 <td className="Detail">{event.details.substring(0, 40)}...</td>
                                 <td>
-                                    {event.links.reddit || event.links.article || event.links.wikipedia ? (
-                                        <>
-                                            {event.links.reddit && (
-                                                <a
-                                                    href={event.links.reddit}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                >
-                                                    <img
-                                                        src="src/assets/images/Reddit.png"
-                                                        alt="Reddit"
-                                                        className="icon"
-                                                    />
-                                                </a>
-                                            )}
-                                            {event.links.article && (
-                                                <a
-                                                    href={event.links.article}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                >
-                                                    <img
-                                                        src="src\assets\images\Article.png"
-                                                        alt="Article"
-                                                        className="icon"
-                                                    />
-                                                </a>
-                                            )}
-                                            {event.links.wikipedia && (
-                                                <a
-                                                    href={event.links.wikipedia}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                >
-                                                    <img
-                                                        src="src/assets/images/wikipedia.png"
-                                                        alt="Wikipedia"
-                                                        className="icon"
-                                                    />
-                                                </a>
-                                            )}
-                                        </>
-                                    ) : (
-                                        'N/A'
-                                    )}
+                                    <SocialLinks
+                                        links={{
+                                            reddit: event.links.reddit,
+                                            article: event.links.article,
+                                            wikipedia: event.links.wikipedia,
+                                        }}
+                                        icons={{
+                                            reddit: { src: 'src/assets/images/Reddit.png', alt: 'Reddit' },
+                                            article: { src: 'src/assets/images/Article.png', alt: 'Article' },
+                                            wikipedia: { src: 'src/assets/images/wikipedia.png', alt: 'Wikipedia' },
+                                        }}
+                                    />
+
                                 </td>
                                 <td className="Status-btn">
                                     <button className="status-button active">Active</button>
@@ -121,7 +90,7 @@ const History = () => {
                 </table>
             </div>
 
-         
+
             <PaginationButton
                 totalPages={totalPages}
                 currentPage={currentPage}

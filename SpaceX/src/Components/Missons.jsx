@@ -1,55 +1,44 @@
 import React, { useState, useEffect } from 'react';
-
+import PaginationButton from '../Components/pagination-button';
+import SocialLinks from './SocialLinks';
 
 const Missions = () => {
-
-    const [events, setEvents] = useState([]); 
+    const [events, setEvents] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const [searchQuery, setSearchQuery] = useState('');
     const [totalItems, setTotalItems] = useState(0);
+    const [searchQuery, setSearchQuery] = useState('');
     const rowsPerPage = 4;
 
+   
 
-
-    
     const fetchMissionData = async (page, limit) => {
         const offset = (page - 1) * limit;
         const url = `https://api.spacexdata.com/v3/missions?limit=${limit}&offset=${offset}`;
+        console.log(`Fetching: ${url}`);
         try {
             const response = await fetch(url);
             const data = await response.json();
+            console.log('Fetched Data:', data);
             return data;
         } catch (error) {
-            console.error("Error", error);
+            console.error('Error fetching mission data:', error);
             return [];
         }
     };
 
-
-
-
    
+
+    const getMissionData = async () => {
+        const missionData = await fetchMissionData(currentPage, rowsPerPage);
+        setEvents(missionData);
+        setTotalItems(9); 
+    };
+
     useEffect(() => {
-        const getMissionData = async () => {
-            const missionData = await fetchMissionData(currentPage, rowsPerPage);
-            setEvents(missionData);
-     
-            setTotalItems(9); 
-        };
         getMissionData();
     }, [currentPage]);
 
-   
-
-
-
-   
-   
     const totalPages = Math.ceil(totalItems / rowsPerPage);
-
-  
-
-
 
     const goToPage = (page) => {
         if (page > 0 && page <= totalPages) {
@@ -58,15 +47,12 @@ const Missions = () => {
     };
 
 
-
-
-
-
-
     const filteredEvents = events.filter((event) =>
         event.mission_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         event.description.toLowerCase().includes(searchQuery.toLowerCase())
     );
+
+
 
     return (
         <div className="history-container">
@@ -80,7 +66,7 @@ const Missions = () => {
                         value={searchQuery}
                         onChange={(e) => {
                             setSearchQuery(e.target.value);
-                            setCurrentPage(1); 
+                            setCurrentPage(1);
                         }}
                     />
                     <select className="history-sort">
@@ -108,52 +94,22 @@ const Missions = () => {
                                 <td>{event.manufacturers.join(', ')}</td>
                                 <td>{event.payload_ids.join(', ').substring(0, 40)}...</td>
                                 <td>
-                                    {event.website || event.twitter || event.wikipedia ? (
-                                        <>
-                                            {event.website && (
-                                                <a
-                                                    href={event.website}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                >
-                                                    <img
-                                                        src="src/assets/images/website.jpg"
-                                                        alt="website"
-                                                        className="icon"
-                                                    />
-                                                </a>
-                                            )}
-                                            {event.twitter && (
-                                                <a
-                                                    href={event.twitter}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                >
-                                                    <img
-                                                        src="src/assets/images/twitter.webp"
-                                                        alt="twitter"
-                                                        className="icon"
-                                                    />
-                                                </a>
-                                            )}
-                                            {event.wikipedia && (
-                                                <a
-                                                    href={event.wikipedia}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                >
-                                                    <img
-                                                        src="src/assets/images/wikipedia.png"
-                                                        alt="Wikipedia"
-                                                        className="icon"
-                                                    />
-                                                </a>
-                                            )}
-                                        </>
-                                    ) : (
-                                        'N/A'
-                                    )}
+
+                                    <SocialLinks
+                                        links={{
+                                            website: event.website,
+                                            twitter: event.twitter,
+                                            wikipedia: event.wikipedia,
+                                        }}
+                                        icons={{
+                                            website: { src: 'src/assets/images/website.jpg', alt: 'Website' },
+                                            twitter: { src: 'src/assets/images/twitter.webp', alt: 'Twitter' },
+                                            wikipedia: { src: 'src/assets/images/wikipedia.png', alt: 'Wikipedia' },
+                                        }}
+                                    />
                                 </td>
+
+
                                 <td className="Status-btn">
                                     <button className="status-button active">Active</button>
                                 </td>
@@ -162,26 +118,11 @@ const Missions = () => {
                     </tbody>
                 </table>
             </div>
-
-           
-            <div className="pagination">
-                <button className="pagination-button" onClick={() => goToPage(currentPage - 1)} disabled={currentPage === 1}>
-                &lt;
-                </button>
-                {Array.from({ length: totalPages }, (_, index) => (
-                <button
-                    key={index}
-                    className={`pagination-button ${currentPage === index + 1 ? 'active' : ''}`}
-                    onClick={() => goToPage(index + 1)}
-                >
-                    {index + 1}
-                </button>
-            ))}
-           
-                <button className="pagination-button" onClick={() => goToPage(currentPage + 1)} disabled={currentPage === totalPages}>
-                &gt;
-                </button>
-            </div>
+            <PaginationButton
+                totalPages={totalPages}
+                currentPage={currentPage}
+                onPageChange={goToPage}
+            />
         </div>
     );
 };
